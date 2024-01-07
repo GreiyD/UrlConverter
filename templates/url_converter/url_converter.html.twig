@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UrlConverter{% endblock %}
+
+{% block body %}
+    <div style="width: 1200px; margin: 0 auto;">
+        <div style="text-align: center; margin-top: 50px;">
+            <h1>URL Converter</h1>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <p>Nickname: {{ nickname }}</p>
+                    <br>
+                        <div>
+                            <h3>Your Urls and Codes:</h3>
+                        </div>
+
+                    {% for urlCode in allUrlCodes %}
+                        <div>
+                            <strong>URL:</strong> {{ urlCode.url }}<br>
+                            <strong>Code:</strong> <a href="{{ path('decode', {'code': urlCode.code}) }}">{{ urlCode.code }}</a><br>
+                            <strong>Transition Count:</strong> {{ urlCode.transitionCount }}<br><br>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div style="flex: 1;">
+                    {% for message in app.flashes('error') %}
+                        <div style="color: red; margin-bottom: 15px;" class="flash-error">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {{ form_start(converterForm) }}
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;">
+                        <label for="{{ converterForm.url.vars.id }}">Enter the URL:</label>
+                        {{ form_widget(converterForm.url, {'attr': {'class': 'input-field'}}) }}
+                        {{ form_errors(converterForm.url) }}
+                    </div>
+                    <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin-bottom: 15px;">Submit</button>
+                    {{ form_end(converterForm) }}
+
+                    {% for message in app.flashes('url_code') %}
+                        <div>
+                            <strong>URL:</strong> {{ message.url }}<br>
+                            <strong>Code:</strong> <a href="{{ path('decode', {'code': message.code}) }}">{{ message.code }}</a><br><br>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
